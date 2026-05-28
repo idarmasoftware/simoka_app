@@ -31,19 +31,21 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div class="space-y-1">
                 <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Nama Anak</p>
-                <p class="text-slate-800 font-bold text-lg">Ahmad Rizki</p>
+                <p class="text-slate-800 font-bold text-lg">{{ $child->nama_lengkap }}</p>
             </div>
             <div class="space-y-1">
                 <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Usia</p>
-                <p class="text-slate-800 font-bold text-lg">4 tahun 3 bulan</p>
+                <p class="text-slate-800 font-bold text-lg">{{ $child->tanggal_lahir->diff(now())->format('%y Tahun %m Bulan') }}</p>
             </div>
             <div class="space-y-1">
                 <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tanggal Assessment</p>
-                <p class="text-slate-800 font-bold text-lg">20 Februari 2026</p>
+                <p class="text-slate-800 font-bold text-lg">{{ now()->translatedFormat('d F Y') }}</p>
             </div>
             <div class="space-y-1">
                 <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Assessment Sebelumnya</p>
-                <p class="text-slate-800 font-bold text-lg">15 November 2025</p>
+                <p class="text-slate-800 font-bold text-lg">
+                    {{ $child->assessments()->latest()->first()?->created_at->format('d M Y') ?? 'Belum Ada' }}
+                </p>
             </div>
         </div>
     </div>
@@ -89,7 +91,7 @@
         </div>
     </div>
 
-    <form action="#" method="POST" class="space-y-12">
+    <form action="{{ route('assessments.store', $child) }}" method="POST" class="space-y-12">
         @csrf
 
         @php

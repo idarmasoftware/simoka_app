@@ -32,12 +32,18 @@
                 <!-- Role -->
                 <div class="space-y-2">
                     <label for="role" class="text-sm font-bold text-slate-700">Role User</label>
-                    <select name="role" id="role"
-                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none text-slate-700 appearance-none">
-                        <option value="orang_tua" {{ old('role') == 'orang_tua' ? 'selected' : '' }}>Orang Tua</option>
-                        <option value="terapis" {{ old('role') == 'terapis' ? 'selected' : '' }}>Terapis</option>
-                        <option value="super_admin" {{ old('role') == 'super_admin' ? 'selected' : '' }}>Super Admin</option>
-                    </select>
+                    @if(auth()->user()->isSuperAdmin())
+                        <select name="role" id="role"
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none text-slate-700 appearance-none">
+                            <option value="orang_tua" {{ old('role') == 'orang_tua' ? 'selected' : '' }}>Orang Tua</option>
+                            <option value="terapis" {{ old('role') == 'terapis' ? 'selected' : '' }}>Terapis</option>
+                            <option value="super_admin" {{ old('role') == 'super_admin' ? 'selected' : '' }}>Super Admin</option>
+                        </select>
+                    @else
+                        <input type="hidden" name="role" value="orang_tua">
+                        <input type="text" readonly value="Orang Tua"
+                               class="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl outline-none text-slate-500 cursor-not-allowed">
+                    @endif
                     @error('role') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                 </div>
             </div>

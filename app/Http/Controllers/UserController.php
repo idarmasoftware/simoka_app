@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -13,7 +14,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->paginate(10);
+        $currentUser = Auth::user();
+        if ($currentUser->isTerapis()) {
+            $users = User::where('role', 'orang_tua')->latest()->paginate(10);
+        } else {
+            $users = User::latest()->paginate(10);
+        }
 
         return view('users.index', compact('users'));
     }
@@ -31,14 +37,27 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $currentUser = Auth::user();
+
+        $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'phone_number' => 'nullable|string|max:20',
             'username' => 'required|string|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:super_admin,terapis,orang_tua',
-        ]);
+        ];
+
+        if ($currentUser->isSuperAdmin()) {
+            $rules['role'] = 'required|in:super_admin,terapis,orang_tua';
+        } else {
+            $rules['role'] = 'nullable|in:orang_tua';
+        }
+
+        $validated = $request->validate($rules);
+
+        if (! $currentUser->isSuperAdmin()) {
+            $validated['role'] = 'orang_tua';
+        }
 
         $validated['password'] = Hash::make($validated['password']);
 

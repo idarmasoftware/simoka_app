@@ -16,80 +16,149 @@
     @endif
 
     <!-- Main Results Card -->
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
-        <div class="p-8 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-                <span class="text-xs font-bold text-blue-600 uppercase tracking-widest bg-blue-50 px-2.5 py-1 rounded-md">Short Sensory Profile</span>
-                <h3 class="font-bold text-slate-800 text-xl mt-2">Hasil Penilaian Sensorik</h3>
+    <!-- Informasi Pasien -->
+    <div class="bg-[#EFF6FF]/60 rounded-2xl border border-blue-200 shadow-sm p-8 mb-6">
+        <div class="flex items-center gap-3 mb-8">
+            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
             </div>
-            <div class="text-sm text-slate-400">
-                Tanggal: <strong class="text-slate-700 font-semibold">{{ $assessment->created_at->format('d M Y') }}</strong>
-            </div>
+            <h3 class="text-lg font-bold text-blue-900">Informasi Pasien</h3>
         </div>
 
-        <div class="p-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                <!-- Info Pasien -->
-                <div class="md:col-span-2 space-y-4">
-                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Informasi Pasien & Terapis</h4>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <p class="text-xs text-slate-400">Nama Anak</p>
-                            <p class="text-slate-800 font-bold">{{ $assessment->child->nama_lengkap }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-slate-400">Terapis</p>
-                            <p class="text-slate-800 font-bold">{{ $assessment->therapis->name }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-slate-400">Jenis Kelamin</p>
-                            <p class="text-slate-800 font-bold">{{ $assessment->child->jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-slate-400">Usia Saat Assessment</p>
-                            <p class="text-slate-800 font-bold">{{ $assessment->child->tanggal_lahir->diff($assessment->created_at)->format('%y Tahun %m Bulan') }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Hasil Klasifikasi & Skor -->
-                <div class="bg-slate-50 rounded-2xl p-6 border border-slate-100 flex flex-col justify-between items-center text-center">
-                    <div>
-                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Skor Total SSP</p>
-                        <span class="text-5xl font-black text-slate-800">{{ $assessment->score }}</span>
-                        <span class="text-xs text-slate-400 block mt-1">dari 115 poin</span>
-                    </div>
-
-                    <div class="mt-4 w-full">
-                        @php
-                            $class = $assessment->result_classification;
-                            $bg = 'bg-blue-50 border-blue-200 text-blue-700';
-                            $label = 'Typical Performance';
-                            
-                            if ($class === 'Probable Difference') {
-                                $bg = 'bg-amber-50 border-amber-200 text-amber-700';
-                                $label = 'Probable Difference';
-                            } elseif ($class === 'Definite Difference') {
-                                $bg = 'bg-rose-50 border-rose-200 text-rose-700';
-                                $label = 'Definite Difference';
-                            }
-                        @endphp
-                        <div class="px-4 py-2 rounded-xl border text-xs font-bold {{ $bg }}">
-                            {{ $label }}
-                        </div>
-                    </div>
-                </div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="space-y-1">
+                <p class="text-xs font-semibold text-blue-500/70 uppercase tracking-wider">Nama Anak</p>
+                <p class="text-blue-950 font-bold text-lg leading-tight">{{ $assessment->child->nama_lengkap }}</p>
             </div>
-
-            <!-- Ringkasan Medis -->
-            @if($assessment->child->catatan_medis)
-                <div class="border-t border-slate-100 pt-6">
-                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Catatan Observasi Terapis</h4>
-                    <p class="text-slate-600 bg-slate-50 border border-slate-100 p-4 rounded-xl text-sm leading-relaxed whitespace-pre-line">{{ $assessment->child->catatan_medis }}</p>
-                </div>
-            @endif
+            <div class="space-y-1">
+                <p class="text-xs font-semibold text-blue-500/70 uppercase tracking-wider">Usia</p>
+                <p class="text-blue-950 font-bold text-lg leading-tight">{{ $assessment->child->tanggal_lahir->diff($assessment->created_at)->format('%y tahun %m bulan') }}</p>
+            </div>
+            <div class="space-y-1">
+                <p class="text-xs font-semibold text-blue-500/70 uppercase tracking-wider">Tanggal Assessment</p>
+                <p class="text-blue-950 font-bold text-lg leading-tight">{{ $assessment->created_at->translatedFormat('d F Y') }}</p>
+            </div>
+            <div class="space-y-1">
+                <p class="text-xs font-semibold text-blue-500/70 uppercase tracking-wider">Terapis</p>
+                <p class="text-blue-950 font-bold text-lg leading-tight">{{ $assessment->therapis->name }}</p>
+            </div>
         </div>
     </div>
+
+    <!-- Interpretasi Keseluruhan -->
+    @php
+        $class = $assessment->result_classification;
+        $score = $assessment->score;
+        $percentage = round(($score / 190) * 100);
+
+        if ($class === 'Typical Performance') {
+            $cardBg = 'bg-emerald-50/50 border-emerald-200';
+            $titleColor = 'text-emerald-900';
+            $descColor = 'text-emerald-800/80';
+            $iconBg = 'bg-emerald-100 text-emerald-600';
+            $title = 'Kinerja Tipikal (Typical Performance)';
+            $desc = 'Anak menunjukkan fungsi pemrosesan sensorik yang khas/tipikal dalam kehidupan sehari-hari. Tidak ada indikasi gangguan sensorik yang signifikan.';
+            $iconSvg = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>';
+        } elseif ($class === 'Probable Difference') {
+            $cardBg = 'bg-amber-50/50 border-amber-200';
+            $titleColor = 'text-amber-900';
+            $descColor = 'text-amber-800/80';
+            $iconBg = 'bg-amber-100 text-amber-600';
+            $title = 'Perbedaan Mungkin (Probable Difference)';
+            $desc = 'Anak menunjukkan kemungkinan adanya perbedaan/gangguan ringan hingga sedang dalam pemrosesan sensorik. Disarankan pemantauan atau stimulasi terarah.';
+            $iconSvg = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>';
+        } else { // Definite Difference
+            $cardBg = 'bg-rose-50/50 border-rose-200';
+            $titleColor = 'text-rose-900';
+            $descColor = 'text-rose-800/80';
+            $iconBg = 'bg-rose-100 text-rose-600';
+            $title = 'Memerlukan Intervensi Segera';
+            $desc = 'Anak menunjukkan kesulitan signifikan di beberapa area sensory processing. Intervensi terapi okupasi segera direkomendasikan.';
+            $iconSvg = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>';
+        }
+    @endphp
+
+    <div class="rounded-2xl border p-8 mb-8 shadow-sm flex flex-col md:flex-row items-start gap-6 {{ $cardBg }}">
+        <div class="w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0 {{ $iconBg }}">
+            {!! $iconSvg !!}
+        </div>
+        <div class="flex-1 space-y-4">
+            <div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1">Interpretasi Keseluruhan</span>
+                <h3 class="text-2xl font-extrabold leading-tight {{ $titleColor }}">{{ $title }}</h3>
+                <p class="text-sm mt-2 leading-relaxed {{ $descColor }}">{{ $desc }}</p>
+            </div>
+            
+            <div class="flex gap-10 border-t border-slate-200/50 pt-4">
+                <div>
+                    <span class="text-xs text-slate-500 font-medium block">Total Skor</span>
+                    <span class="text-3xl font-black text-slate-800">{{ $score }} <span class="text-base font-normal text-slate-400">/ 190</span></span>
+                </div>
+                <div>
+                    <span class="text-xs text-slate-500 font-medium block">Persentase</span>
+                    <span class="text-3xl font-black text-slate-800">{{ $percentage }}%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Breakdown Skor per Kategori -->
+    <div class="mb-10">
+        <h3 class="text-lg font-bold text-slate-800 mb-6">Breakdown Skor per Kategori</h3>
+        
+        <div class="space-y-4">
+            @foreach($assessment->domain_breakdown as $key => $data)
+                @php
+                    $dClass = $data['classification'];
+                    if ($dClass === 'Typical Performance') {
+                        $badgeBg = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+                        $barBg = 'bg-emerald-500';
+                        $iconClass = 'bg-emerald-50 text-emerald-600 border border-emerald-100';
+                        $iconHtml = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>';
+                    } elseif ($dClass === 'Probable Difference') {
+                        $badgeBg = 'bg-amber-50 text-amber-700 border-amber-200';
+                        $barBg = 'bg-amber-500';
+                        $iconClass = 'bg-amber-50 text-amber-600 border border-amber-100';
+                        $iconHtml = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>';
+                    } else { // Definite Difference
+                        $badgeBg = 'bg-rose-50 text-rose-700 border-rose-200';
+                        $barBg = 'bg-rose-500';
+                        $iconClass = 'bg-rose-50 text-rose-600 border border-rose-100';
+                        $iconHtml = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>';
+                    }
+                @endphp
+                
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 hover:shadow-md transition duration-300">
+                    <div class="flex items-center justify-between gap-4 mb-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 {{ $iconClass }}">
+                                {!! $iconHtml !!}
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-base leading-snug">{{ $data['name'] }}</h4>
+                                <p class="text-xs text-slate-400 mt-0.5">Skor: <strong class="text-slate-600 font-bold">{{ $data['score'] }}</strong> / {{ $data['max_score'] }} ({{ $data['percentage'] }}%)</p>
+                            </div>
+                        </div>
+                        <span class="px-3.5 py-1.5 rounded-xl border text-xs font-bold {{ $badgeBg }}">
+                            {{ $dClass }}
+                        </span>
+                    </div>
+                    
+                    <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="h-full rounded-full transition-all duration-500 ease-out {{ $barBg }}" style="width: {{ $data['percentage'] }}%"></div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
+    <!-- Ringkasan Observasi Terapis -->
+    @if($assessment->child->catatan_medis)
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 mb-6">
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Catatan Observasi Terapis</h4>
+            <p class="text-slate-600 bg-slate-50 border border-slate-100 p-6 rounded-xl text-sm leading-relaxed whitespace-pre-line">{{ $assessment->child->catatan_medis }}</p>
+        </div>
+    @endif
 
     <!-- Recommendations & Homework Section -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">

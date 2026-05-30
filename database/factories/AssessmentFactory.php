@@ -23,15 +23,15 @@ class AssessmentFactory extends Factory
     {
         $answers = [];
         $score = 0;
-        for ($i = 1; $i <= 23; $i++) {
+        for ($i = 1; $i <= 38; $i++) {
             $val = fake()->numberBetween(1, 5);
             $answers[$i] = $val;
             $score += $val;
         }
 
-        if ($score <= 50) {
+        if ($score >= 155) {
             $classification = 'Typical Performance';
-        } elseif ($score <= 75) {
+        } elseif ($score >= 142) {
             $classification = 'Probable Difference';
         } else {
             $classification = 'Definite Difference';

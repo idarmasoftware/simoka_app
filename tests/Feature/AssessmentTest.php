@@ -45,9 +45,9 @@ test('therapist can submit ssp assessment and see results', function () {
     $therapist = User::factory()->create(['role' => 'terapis']);
     $child = Child::factory()->create(['therapis_id' => $therapist->id]);
 
-    // Build assessment questionnaire answers (q1 to q23, all 4s => total 92)
+    // Build assessment questionnaire answers (q1 to q38, all 4s => total 152)
     $payload = [];
-    for ($i = 1; $i <= 23; $i++) {
+    for ($i = 1; $i <= 38; $i++) {
         $payload["q{$i}"] = 4;
     }
     $payload['clinical_notes'] = 'Anak sensitif terhadap suara dan sentuhan.';
@@ -58,8 +58,8 @@ test('therapist can submit ssp assessment and see results', function () {
     // Should redirect to assessment result page
     $assessment = Assessment::first();
     expect($assessment)->not->toBeNull();
-    expect($assessment->score)->toBe(92);
-    expect($assessment->result_classification)->toBe('Definite Difference');
+    expect($assessment->score)->toBe(152);
+    expect($assessment->result_classification)->toBe('Probable Difference');
 
     $response->assertRedirect(route('assessments.show', $assessment));
 

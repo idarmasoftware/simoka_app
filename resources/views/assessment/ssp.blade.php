@@ -6,7 +6,7 @@
 @section('content')
 <div x-data="{
     answers: {},
-    totalQuestions: 23,
+    totalQuestions: 38,
     get progress() {
         let count = Object.keys(this.answers).length;
         return Math.round((count / this.totalQuestions) * 100);
@@ -84,7 +84,7 @@
                     </li>
                     <li class="flex items-start gap-2">
                         <span class="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0"></span>
-                        <p class="text-sm italic font-semibold">Skor yang lebih tinggi menunjukkan kesulitan yang lebih besar dalam sensory processing</p>
+                        <p class="text-sm italic font-semibold">Skor yang lebih rendah menunjukkan kesulitan yang lebih besar (selalu/sering mengalami perilaku sensorik tersebut)</p>
                     </li>
                 </ul>
             </div>
@@ -96,39 +96,66 @@
 
         @php
             $categories = [
-                'Tactile Sensitivity' => [
-                    1 => 'Menghindari atau tidak suka berjalan tanpa alas kaki, terutama di rumput atau pasir',
-                    2 => 'Bereaksi secara emosional atau agresif ketika disentuh',
-                    3 => 'Menarik diri dari percikan air atau tidak menyukai air mengenai wajah',
-                    4 => 'Menghindari aktivitas yang melibatkan tangan kotor (cat, lem, pasir)',
+                'Sensitivitas Taktil (Tactile Sensitivity)' => [
+                    1 => 'Terlihat tertekan saat dandan (contoh: menangis saat potong rambut, cuci muka, atau potong kuku)',
+                    2 => 'Lebih suka memakai baju lengan panjang saat cuaca hangat atau lebih suka memakai baju lengan pendek saat cuaca dingin',
+                    3 => 'Tidak suka bertelanjang kaki, terutama saat berjalan di tempat yang berpasir atau di rerumputan',
+                    4 => 'Saat disentuh responnya sangat emosional atau agresif',
+                    5 => 'Menghindari semprotan air',
+                    6 => 'Kesulitan berdiri dibarisan atau berdiri dekat orang lain',
+                    7 => 'Suka menggosok-gosok atau menggaruk bagian tubuh yang disentuh',
                 ],
-                'Taste/Smell Sensitivity' => [
-                    5 => 'Pilih-pilih makanan, terutama tekstur tertentu',
-                    6 => 'Menghindari makanan dengan bau atau rasa tertentu',
-                    7 => 'Sensitif terhadap bau yang tidak diperhatikan orang lain',
+                'Sensitivitas Rasa/Bau (Taste/Smell Sensitivity)' => [
+                    8 => 'Menghindari bau atau rasa tertentu',
+                    9 => 'Hanya makan makanan tertentu (tuliskan makanan apa saja yang dimakan anak)',
+                    10 => 'Membatasi diri terhadap tekstur makanan tertentu atau suhu makanan tertentu',
+                    11 => 'Suka memilih-milih makanan, terutama tekstur makanan',
                 ],
-                'Movement Sensitivity' => [
-                    8 => 'Menjadi cemas jika kaki diangkat dari tanah (misal: naik tangga, ayunan)',
-                    9 => 'Menghindari peralatan bermain yang bergerak atau berputar',
-                    10 => 'Sangat takut jatuh atau ketinggian',
+                'Sensitivitas Gerakan (Movement Sensitivity)' => [
+                    12 => 'Saat kaki tidak menapak di tanah anak merasa cemas atau ketakutan',
+                    13 => 'Takut ketinggian atau takut jatuh',
+                    14 => 'Tidak menyukai aktivitas yang memposisikan kepala dibawah (misalnya: jungkir balik, kayang dll)',
                 ],
-                'Visual Sensitivity' => [
-                    23 => 'Kesulitan menemukan objek di area yang ramai atau penuh'
-                ]
+                'Underresponsive/Mencari Sensasi (Underresponsive/Seeks Sensation)' => [
+                    15 => 'Menikmati suara-suara aneh / suka membuat suara gaduh',
+                    16 => 'Selalu bergerak dan hal tersebut mempengaruhi kemampuan aktivitas sehari-harinya (misalnya: tidak dapat duduk tenang, terus bergerak)',
+                    17 => 'Selama bergerak anak terlihat sangat senang (excited)',
+                    18 => 'Suka menyentuh orang atau benda-benda disekitarnya',
+                    19 => 'Mengabaikan muka atau tangannya yang kotor',
+                    20 => 'Suka berganti-ganti aktifitas termasuk bermain',
+                    21 => 'Lengan baju dipilin atau digulung (dilingkis)',
+                ],
+                'Penyaringan Suara (Auditory Filtering)' => [
+                    22 => 'Terdistraksi atau kesulitan dalam mendengarkan bila banyak suara gaduh/bising di sekitarnya',
+                    23 => 'Terlihat tidak mendengar kata-kata orang lain (misalnya: tidak memahami apa yang dikatakan orang lain, terlihat mengabaikan orang lain)',
+                    24 => 'Tidak mampu beraktivitas dalam ruangan yang bising/gaduh (misalnya: suara kipas angin, lemari es, dll)',
+                    25 => 'Sulit menyelesaikan tugas bila pada saat yang sama mendengar suara radio',
+                    26 => 'Tidak berespon saat dipanggil namanya tapi kita tahu bahwa kemampuan mendengar anak baik-baik saja.',
+                    27 => 'Sulit memfokuskan perhatian',
+                ],
+                'Lemah/Kurang Berenergi (Low Energy/Weak)' => [
+                    28 => 'Otot terlihat lemah',
+                    29 => 'Mudah lelah, terutama saat berdiri atau memegang benda pada posisi tertentu',
+                    30 => 'Kemampuan menggenggam lemah',
+                    31 => 'Tidak mampu mengangkat benda yang berat (bila dibandingkan dengan anak lain seusianya)',
+                    32 => 'Senang menyandarkan badannya sekalipun saat beraktivitas',
+                    33 => 'Daya tahan tubuhnya sangat lemah / mudah capai',
+                ],
+                'Sensitivitas Auditori/Visual (Visual/Auditory Sensitivity)' => [
+                    34 => 'Berespon negatif terhadap suara yang keras atau tidak disukai (misalnya menangis atau bersembunyi saat mendengar suara penyedot debu, gonggongan anjing atau pengering rambut)',
+                    35 => 'Menutupi daun telinga agar tidak mendengar suara yang tidak disukai',
+                    36 => 'Terganggu dengan cahaya yang terang',
+                    37 => 'Melihat setiap orang yang ada di dalam ruangan saat dia berjalan dalam ruangan tsb',
+                    38 => 'Menutup mata atau menyipitkan mata untuk melindungi mata dari cahaya',
+                ],
             ];
 
-            // Fill placeholders to make it 23
-            for($i = 11; $i < 23; $i++) {
-                $categories['Visual Sensitivity'][$i] = 'Indikator perilaku sensorik nomor ' . $i;
-            }
-            ksort($categories['Visual Sensitivity']);
-
             $options = [
-                5 => 'Selalu',
-                4 => 'Sering',
+                1 => 'Selalu',
+                2 => 'Sering',
                 3 => 'Kadang-kadang',
-                2 => 'Jarang',
-                1 => 'Tidak Pernah'
+                4 => 'Jarang',
+                5 => 'Tidak Pernah'
             ];
             $cat_index = 1;
         @endphp

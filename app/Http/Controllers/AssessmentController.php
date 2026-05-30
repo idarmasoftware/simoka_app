@@ -93,7 +93,7 @@ class AssessmentController extends Controller
         }
 
         $rules = [];
-        for ($i = 1; $i <= 23; $i++) {
+        for ($i = 1; $i <= 38; $i++) {
             $rules["q{$i}"] = 'required|integer|between:1,5';
         }
         $rules['clinical_notes'] = 'nullable|string';
@@ -103,21 +103,21 @@ class AssessmentController extends Controller
         // Calculate score
         $answers = [];
         $totalScore = 0;
-        for ($i = 1; $i <= 23; $i++) {
+        for ($i = 1; $i <= 38; $i++) {
             $val = (int) $validated["q{$i}"];
             $answers[$i] = $val;
             $totalScore += $val;
         }
 
         // Classification
-        // 23 questions. Max score = 115, Min score = 23.
-        // Higher score = greater sensory processing difficulty (sensory seeking/sensitivity)
-        if ($totalScore <= 50) {
-            $classification = 'Typical Performance'; // Kinerja Tipikal
-        } elseif ($totalScore <= 75) {
-            $classification = 'Probable Difference'; // Perbedaan Mungkin
+        // 38 questions. Max score = 190, Min score = 38.
+        // Higher score = better (Typical Performance). Lower score = difficulty (Definite Difference).
+        if ($totalScore >= 155) {
+            $classification = 'Typical Performance';
+        } elseif ($totalScore >= 142) {
+            $classification = 'Probable Difference';
         } else {
-            $classification = 'Definite Difference'; // Perbedaan Jelas
+            $classification = 'Definite Difference';
         }
 
         // Store

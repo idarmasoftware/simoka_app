@@ -166,4 +166,46 @@ class AssessmentController extends Controller
 
         return view('assessment.show', compact('assessment', 'existingTasks'));
     }
+
+    /**
+     * Compare pre-assessment and post-assessment for a child.
+     */
+    public function progress(Request $request)
+    {
+        $user = Auth::user();
+        
+        $childId = $request->query('child_id');
+
+        // If no child selected, show selection page
+        if (!$childId) {
+            if ($user->isTerapis()) {
+                $children = Child::where('therapis_id', $user->id)->get();
+            } elseif ($user->isOrangTua()) {
+                $children = $user->children;
+            } else {
+                $children = Child::all();
+            }
+            return view('assessment.select_child_progress', compact('children'));
+        }
+
+        // Validate access
+        if ($user->isOrangTua() && !$user->children()->where('id', $childId)->exists()) {
+            abort(403, 'Anda tidak diizinkan melihat progress untuk anak ini.');
+        }
+
+        $selectedChild = Child::findOrFail($childId);
+        $assessments = Assessment::where('child_id', $childId)
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        if ($assessments->count() < 2) {
+            return redirect()->route('assessments.progress')
+                ->with('error', 'Diperlukan minimal 2 assessment (Pre & Post) untuk melihat perbandingan progress.');
+        }
+
+        $preAssessment = $assessments->first();
+        $postAssessment = $assessments->last();
+
+        return view('assessment.progress', compact('selectedChild', 'preAssessment', 'postAssessment'));
+    }
 }

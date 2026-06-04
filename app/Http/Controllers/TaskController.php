@@ -156,7 +156,7 @@ class TaskController extends Controller
         }
 
         $request->validate([
-            'video' => 'required|file|mimes:mp4,mov,avi,mkv,webm|max:51200', // max 50MB
+            'video' => 'required|file|mimes:mp4,mov,avi,mkv,webm,jpeg,png,jpg,gif|max:51200', // max 50MB
             'notes' => 'nullable|string|max:1000',
         ]);
 
@@ -186,11 +186,11 @@ class TaskController extends Controller
             }
 
             return redirect()->route('tasks.show', $task)
-                ->with('success', "Video untuk Langkah {$step->step_number} berhasil diunggah!");
+                ->with('success', "File untuk Langkah {$step->step_number} berhasil diunggah!");
         }
 
         return redirect()->route('tasks.show', $task)
-            ->with('error', 'Gagal mengunggah video. Pastikan file valid dan di bawah 50MB.');
+            ->with('error', 'Gagal mengunggah file. Pastikan file valid dan di bawah 50MB.');
     }
 
     /**

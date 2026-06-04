@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Pasien - SI-MOKA')
-@section('page_title', 'Edit Pasien')
+@section('title', 'Ubah Data Pasien - SI-MOKA')
+@section('page_title', 'Ubah Data Pasien')
 
 @section('content')
 <div class="max-w-3xl mx-auto">
@@ -10,7 +10,7 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
         </a>
         <div>
-            <h2 class="text-2xl font-bold text-slate-800">Edit Pasien (Anak)</h2>
+            <h2 class="text-2xl font-bold text-slate-800">Ubah Data Pasien (Anak)</h2>
             <p class="text-slate-500 text-sm">Perbarui data anak, orang tua, dan terapis.</p>
         </div>
     </div>

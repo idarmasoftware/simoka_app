@@ -7,7 +7,7 @@
 <div class="max-w-4xl mx-auto pb-32">
     <!-- Breadcrumb / Back Link -->
     <div class="mb-6">
-        <a href="{{ route('tasks.index') }}" class="text-blue-600 font-semibold hover:text-blue-700 text-sm flex items-center gap-1.5 transition">
+        <a href="{{ route('tasks.index') }}" class="text-purple-600 font-semibold hover:text-purple-700 text-sm flex items-center gap-1.5 transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             Kembali ke Daftar Tugas
         </a>
@@ -135,14 +135,18 @@
                         </div>
 
                         @if($step->video_path)
-                            <!-- Uploaded Video Player -->
+                            <!-- Uploaded Media Player -->
                             <div class="border-t border-slate-100 pt-6">
-                                <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Video Rekaman Pengerjaan Anda</h5>
-                                <div class="rounded-xl overflow-hidden bg-slate-900 border border-slate-200 max-w-lg aspect-video">
-                                    <video controls class="w-full h-full object-contain">
-                                        <source src="{{ asset('storage/' . $step->video_path) }}" type="video/mp4">
-                                        Browser Anda tidak mendukung tag video.
-                                    </video>
+                                <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Rekaman/Foto Pengerjaan Anda</h5>
+                                <div class="rounded-xl overflow-hidden bg-slate-900 border border-slate-200 max-w-lg aspect-video flex items-center justify-center">
+                                    @if(Str::endsWith(strtolower($step->video_path), ['.jpg', '.jpeg', '.png', '.gif']))
+                                        <img src="{{ asset('storage/' . $step->video_path) }}" alt="Bukti Pengerjaan" class="w-full h-full object-contain">
+                                    @else
+                                        <video controls class="w-full h-full object-contain">
+                                            <source src="{{ asset('storage/' . $step->video_path) }}" type="video/{{ pathinfo($step->video_path, PATHINFO_EXTENSION) ?: 'mp4' }}">
+                                            Browser Anda tidak mendukung tag video.
+                                        </video>
+                                    @endif
                                 </div>
                                 @if($step->notes)
                                     <div class="mt-4 bg-slate-50 border border-slate-100 p-4 rounded-xl text-sm text-slate-600">
@@ -167,23 +171,23 @@
                         @endif
 
                         @if($step->status === 'pending' || $step->status === 'rejected')
-                            <!-- Video Upload Form -->
+                            <!-- File Upload Form -->
                             <div class="border-t border-slate-100 pt-6">
-                                <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Unggah Rekaman Latihan</h5>
+                                <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Unggah Rekaman / Foto Latihan</h5>
                                 
-                                <form action="{{ route('tasks.steps.upload', $step) }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('tasks.steps.upload', $step) }}" method="POST" enctype="multipart/form-data" x-data="{ uploading: false }" @submit="if($el.checkValidity()) { uploading = true }">
                                     @csrf
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                            <label class="block text-sm font-bold text-slate-700 mb-2">Pilih File Video</label>
+                                            <label class="block text-sm font-bold text-slate-700 mb-2">Pilih File (Video / Gambar)</label>
                                             <div class="relative flex items-center justify-center w-full border-2 border-dashed border-slate-200 hover:border-purple-300 rounded-xl p-6 transition group cursor-pointer bg-slate-50 hover:bg-purple-50/20">
-                                                <input type="file" name="video" required accept="video/*"
+                                                <input type="file" name="video" required accept="video/*,image/*"
                                                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                                       onchange="document.getElementById('fileName_{{ $step->id }}').innerText = this.files[0] ? this.files[0].name : 'Pilih file video...'">
+                                                       onchange="document.getElementById('fileName_{{ $step->id }}').innerText = this.files[0] ? this.files[0].name : 'Pilih file...'">
                                                 <div class="text-center">
                                                     <svg class="w-8 h-8 text-slate-400 group-hover:text-purple-600 mx-auto mb-2 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                                                    <p id="fileName_{{ $step->id }}" class="text-sm font-semibold text-slate-600 group-hover:text-purple-700 transition">Klik untuk pilih video (Maks 50MB)</p>
-                                                    <p class="text-[10px] text-slate-400 mt-1">Mendukung format .mp4, .mov, .webm, .avi</p>
+                                                    <p id="fileName_{{ $step->id }}" class="text-sm font-semibold text-slate-600 group-hover:text-purple-700 transition">Klik untuk pilih file (Maks 50MB)</p>
+                                                    <p class="text-[10px] text-slate-400 mt-1">Mendukung .mp4, .mov, .jpg, .png, dll</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -196,8 +200,15 @@
                                     </div>
                                     
                                     <div class="mt-5 flex justify-end">
-                                        <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg shadow-purple-100 active:scale-95 transition-all text-sm">
-                                            Unggah & Kirim Langkah {{ $step->step_number }}
+                                        <button type="submit" 
+                                                x-bind:disabled="uploading"
+                                                x-bind:class="{ 'opacity-75 cursor-not-allowed': uploading }"
+                                                class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg shadow-purple-100 active:scale-95 transition-all text-sm flex items-center gap-2">
+                                            <svg x-show="uploading" style="display: none;" class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            <span x-text="uploading ? 'Mengunggah...' : 'Unggah & Kirim Langkah {{ $step->step_number }}'"></span>
                                         </button>
                                     </div>
                                 </form>

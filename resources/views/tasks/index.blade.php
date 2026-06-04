@@ -107,11 +107,11 @@
                                 </td>
                                 <td class="p-5 text-center">
                                     @if(Auth::user()->isTerapis())
-                                        <a href="{{ route('tasks.review', $task) }}" class="inline-flex items-center gap-1.5 text-blue-600 hover:text-blue-700 font-bold hover:underline">
+                                        <a href="{{ route('tasks.review', $task) }}" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-purple-600 text-white hover:bg-purple-700 font-bold rounded-xl transition-all shadow-sm shadow-purple-100 active:scale-95 text-xs">
                                             Review &rarr;
                                         </a>
                                     @else
-                                        <a href="{{ route('tasks.show', $task) }}" class="inline-flex items-center gap-1.5 text-purple-600 hover:text-purple-700 font-bold hover:underline">
+                                        <a href="{{ route('tasks.show', $task) }}" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-purple-600 text-white hover:bg-purple-700 font-bold rounded-xl transition-all shadow-sm shadow-purple-100 active:scale-95 text-xs">
                                             Kerjakan &rarr;
                                         </a>
                                     @endif

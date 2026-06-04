@@ -215,7 +215,7 @@
                     <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                     </div>
-                    <span>Harap lengkapi semua <strong x-text="totalQuestions"></strong> pertanyaan sebelum submit assessment (Saat ini: <strong x-text="completedCount"></strong> pertanyaan terisi)</span>
+                    <span>Harap lengkapi semua <strong x-text="totalQuestions"></strong> pertanyaan sebelum menyimpan assessment (Saat ini: <strong x-text="completedCount"></strong> pertanyaan terisi)</span>
                 </div>
 
                 <div class="flex flex-col sm:flex-row items-center gap-4">
@@ -228,7 +228,7 @@
                             :class="completedCount < totalQuestions ? 'bg-blue-300 cursor-not-allowed opacity-70' : 'bg-blue-600 hover:bg-blue-700 shadow-xl shadow-blue-200 active:scale-95'"
                             class="w-full sm:w-auto flex-[2] flex items-center justify-center gap-3 text-white px-8 py-4.5 rounded-2xl font-bold transition-all">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
-                        Submit Assessment
+                        Kirim Assessment
                     </button>
                 </div>
             </div>

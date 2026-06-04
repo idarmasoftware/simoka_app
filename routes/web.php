@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('role:super_admin,terapis,orang_tua')->group(function () {
+        Route::get('assessments/progress', [AssessmentController::class, 'progress'])->name('assessments.progress');
         Route::get('assessments', [AssessmentController::class, 'index'])->name('assessments.index');
         Route::get('assessments/{assessment}', [AssessmentController::class, 'show'])->name('assessments.show');
     });

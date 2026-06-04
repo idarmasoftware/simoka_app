@@ -7,7 +7,7 @@
 <div class="max-w-4xl mx-auto pb-32">
     <!-- Breadcrumb / Back Link -->
     <div class="mb-6">
-        <a href="{{ route('tasks.index') }}" class="text-blue-600 font-semibold hover:text-blue-700 text-sm flex items-center gap-1.5 transition">
+        <a href="{{ route('tasks.index') }}" class="text-purple-600 font-semibold hover:text-purple-700 text-sm flex items-center gap-1.5 transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             Kembali ke Daftar Tugas
         </a>
@@ -27,7 +27,7 @@
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 mb-8">
         <div class="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6 pb-6 border-b border-slate-100">
             <div>
-                <span class="text-[10px] font-bold uppercase tracking-widest bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md border border-blue-100">Tinjau Program Rumah</span>
+                <span class="text-[10px] font-bold uppercase tracking-widest bg-purple-50 text-purple-700 px-2.5 py-1 rounded-md border border-purple-100">Tinjau Program Rumah</span>
                 <h3 class="font-bold text-slate-800 text-2xl mt-3">{{ $task->title }}</h3>
                 <p class="text-slate-500 text-sm mt-1">Pasien Anak: <strong class="text-slate-700 font-bold">{{ $task->child->nama_lengkap }}</strong></p>
             </div>
@@ -59,7 +59,7 @@
                 <!-- Step Header -->
                 <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                     <div class="flex items-center gap-3">
-                        <span class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm flex-shrink-0">
+                        <span class="w-8 h-8 rounded-full bg-purple-600 text-white font-bold flex items-center justify-center text-sm flex-shrink-0">
                             {{ $step->step_number }}
                         </span>
                         <h4 class="font-bold text-slate-800 text-base">Langkah {{ $step->step_number }}</h4>
@@ -140,11 +140,11 @@
                                     <div>
                                         <label for="feedback_{{ $step->id }}" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Feedback & Catatan Terapis</label>
                                         <textarea name="feedback" id="feedback_{{ $step->id }}" rows="3" required
-                                                  class="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition outline-none text-slate-700 text-sm"
+                                                  class="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 focus:ring-4 focus:ring-purple-500/10 focus:border-purple-500 transition outline-none text-slate-700 text-sm"
                                                   placeholder="Masukkan masukan klinis, koreksi gerakan, atau pujian untuk memotivasi anak/orang tua..."></textarea>
                                     </div>
 
-                                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-md active:scale-95 transition-all text-sm">
+                                    <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-xl shadow-md active:scale-95 transition-all text-sm">
                                         Simpan Review & Feedback
                                     </button>
                                 </form>

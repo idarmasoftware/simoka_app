@@ -12,14 +12,32 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $currentUser = Auth::user();
+        
+        $query = User::query();
+
         if ($currentUser->isTerapis()) {
-            $users = User::where('role', 'orang_tua')->latest()->paginate(10);
-        } else {
-            $users = User::latest()->paginate(10);
+            $query->where('role', 'orang_tua');
         }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('username', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('role')) {
+            if ($currentUser->isSuperAdmin()) {
+                $query->where('role', $request->role);
+            }
+        }
+
+        $users = $query->latest()->paginate(10)->withQueryString();
 
         return view('users.index', compact('users'));
     }

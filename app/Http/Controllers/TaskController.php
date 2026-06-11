@@ -14,28 +14,42 @@ class TaskController extends Controller
     /**
      * Display a listing of the tasks.
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
 
+        $query = Task::with(['child', 'therapis', 'assessment']);
+
         if ($user->isTerapis()) {
-            $tasks = Task::with(['child', 'assessment'])
-                ->where('therapis_id', $user->id)
-                ->latest()
-                ->paginate(10);
+            $query->where('therapis_id', $user->id);
         } elseif ($user->isOrangTua()) {
             $childIds = $user->children()->pluck('id');
-            $tasks = Task::with(['child', 'therapis'])
-                ->whereIn('child_id', $childIds)
-                ->latest()
-                ->paginate(10);
-        } else {
-            $tasks = Task::with(['child', 'therapis'])
-                ->latest()
-                ->paginate(10);
+            $query->whereIn('child_id', $childIds);
         }
 
-        return view('tasks.index', compact('tasks'));
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('child_id')) {
+            $query->where('child_id', $request->child_id);
+        }
+
+        $tasks = $query->latest()->paginate(10)->withQueryString();
+
+        if ($user->isTerapis()) {
+            $children = \App\Models\Child::where('therapis_id', $user->id)->get();
+        } elseif ($user->isOrangTua()) {
+            $children = $user->children;
+        } else {
+            $children = \App\Models\Child::all();
+        }
+
+        return view('tasks.index', compact('tasks', 'children'));
     }
 
     /**

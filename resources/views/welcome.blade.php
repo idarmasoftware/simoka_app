@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('simonita.svg') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SI-MOKA | Sistem Informasi Monitoring Terapi Okupasi Anak</title>
+    <title>SIMONITA | Sistem Informasi Monitoring Terapi Okupasi Anak</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -21,7 +22,7 @@
                     <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
                         S
                     </div>
-                    <span class="font-bold text-xl tracking-tight text-blue-900">SI-MOKA</span>
+                    <span class="font-bold text-xl tracking-tight text-blue-900">SIMONITA</span>
                 </div>
                 <div class="flex space-x-4 items-center">
                     <a href="#" class="text-slate-600 hover:text-blue-600 font-medium px-3 py-2 transition">Masuk</a>
@@ -41,7 +42,7 @@
                     Pantau Tumbuh Kembang Anak Lebih Mudah & Terarah
                 </h1>
                 <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                    SI-MOKA membantu orang tua dan terapis berkolaborasi mendigitalkan evaluasi sensori (Short Sensory Profile) dan memantau riwayat terapi anak secara terpadu.
+                    SIMONITA membantu orang tua dan terapis berkolaborasi mendigitalkan evaluasi sensori (Short Sensory Profile) dan memantau riwayat terapi anak secara terpadu.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                     <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-full transition shadow-lg text-center">
@@ -71,7 +72,7 @@
     <section id="fitur" class="py-20 bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-slate-900 mb-4">Mengapa Menggunakan SI-MOKA?</h2>
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Mengapa Menggunakan SIMONITA?</h2>
                 <p class="text-slate-600 max-w-2xl mx-auto">Kami merancang sistem ini untuk mempermudah alur komunikasi antara klinik, terapis, dan orang tua pasien.</p>
             </div>
 
@@ -99,7 +100,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-2">
                 <div class="w-6 h-6 bg-blue-600 rounded flex items-center justify-center text-white font-bold text-xs">S</div>
-                <span class="font-semibold text-slate-800">SI-MOKA</span>
+                <span class="font-semibold text-slate-800">SIMONITA</span>
             </div>
             <p class="text-slate-500 text-sm">© {{ date('Y') }} Sistem Informasi Monitoring Terapi Okupasi Anak. All rights reserved.</p>
         </div>

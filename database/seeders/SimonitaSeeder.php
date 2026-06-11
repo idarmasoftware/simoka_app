@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-class SimokaSeeder extends Seeder
+class SimonitaSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,8 +15,8 @@ class SimokaSeeder extends Seeder
     {
         // Super Admin
         $admin = User::create([
-            'name' => 'Admin SIMOKA',
-            'email' => 'admin@simoka.id',
+            'name' => 'Admin SIMONITA',
+            'email' => 'admin@simonita.id',
             'phone_number' => '08123456789',
             'username' => 'admin',
             'password' => Hash::make('password'),
@@ -26,9 +26,9 @@ class SimokaSeeder extends Seeder
         // Terapis
         $terapis = User::create([
             'name' => 'Rossy Putri Utami',
-            'email' => 'rossy@simoka.id',
+            'email' => 'rossy@simonita.id',
             'phone_number' => '08122334455',
-            'username' => 'rossy',
+            'username' => 'terapis',
             'password' => Hash::make('password'),
             'role' => 'terapis',
         ]);

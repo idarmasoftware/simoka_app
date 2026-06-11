@@ -19,6 +19,30 @@
         </div>
     @endif
 
+    <!-- Search & Filter -->
+    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-6">
+        <form action="{{ route('assessments.progress') }}" method="GET" class="flex flex-col lg:flex-row flex-wrap items-center gap-4">
+            <div class="w-full lg:flex-1">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama anak..." autocomplete="off" class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-sm">
+            </div>
+            <div class="w-full lg:w-48">
+                <select name="gender" class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-sm bg-white">
+                    <option value="">Semua Jenis Kelamin</option>
+                    <option value="L" {{ request('gender') == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                    <option value="P" {{ request('gender') == 'P' ? 'selected' : '' }}>Perempuan</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="w-full sm:w-auto bg-blue-50 text-blue-600 hover:bg-blue-100 px-6 py-2 rounded-xl font-medium transition text-sm">Cari</button>
+            </div>
+            @if(request()->hasAny(['search', 'gender']))
+            <div>
+                <a href="{{ route('assessments.progress') }}" class="flex items-center justify-center w-full sm:w-auto bg-slate-50 text-slate-500 hover:bg-slate-100 px-4 py-2 rounded-xl font-medium transition text-sm">Reset</a>
+            </div>
+            @endif
+        </form>
+    </div>
+
     @if($children->isEmpty())
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-12 text-center">
             <div class="w-16 h-16 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center mx-auto mb-4">

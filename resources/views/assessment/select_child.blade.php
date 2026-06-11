@@ -10,6 +10,39 @@
         <p class="text-slate-500 mt-1">Silakan pilih anak untuk memulai proses assessment sensory.</p>
     </div>
 
+    @if(session('error'))
+        <div class="mb-6 bg-rose-50 border border-rose-200 text-rose-800 rounded-2xl p-4 flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+            <p class="font-medium text-sm">{{ session('error') }}</p>
+        </div>
+    @endif
+
+    <!-- Search & Filter -->
+    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-6">
+        <form action="{{ route('assessments.select_child') }}" method="GET" class="flex flex-col lg:flex-row flex-wrap items-center gap-4">
+            <div class="w-full lg:flex-1">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama anak..." autocomplete="off" class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-sm">
+            </div>
+            <div class="w-full lg:w-48">
+                <select name="gender" class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-sm bg-white">
+                    <option value="">Semua Jenis Kelamin</option>
+                    <option value="L" {{ request('gender') == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                    <option value="P" {{ request('gender') == 'P' ? 'selected' : '' }}>Perempuan</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="w-full sm:w-auto bg-blue-50 text-blue-600 hover:bg-blue-100 px-6 py-2 rounded-xl font-medium transition text-sm">Cari</button>
+            </div>
+            @if(request()->hasAny(['search', 'gender']))
+            <div>
+                <a href="{{ route('assessments.select_child') }}" class="flex items-center justify-center w-full sm:w-auto bg-slate-50 text-slate-500 hover:bg-slate-100 px-4 py-2 rounded-xl font-medium transition text-sm">Reset</a>
+            </div>
+            @endif
+        </form>
+    </div>
+
     @if($children->isEmpty())
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-12 text-center">
             <div class="w-16 h-16 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center mx-auto mb-4">

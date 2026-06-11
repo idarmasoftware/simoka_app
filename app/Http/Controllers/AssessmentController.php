@@ -22,16 +22,19 @@ class AssessmentController extends Controller
             $children = $user->children;
 
             if ($childId) {
-                // Ensure parent owns the child
                 if (! $user->children()->where('id', $childId)->exists()) {
                     abort(403, 'Anda tidak diizinkan melihat assessment untuk anak ini.');
                 }
 
                 $selectedChild = Child::findOrFail($childId);
-                $assessments = Assessment::with(['child', 'therapis'])
-                    ->where('child_id', $childId)
-                    ->latest()
-                    ->paginate(10);
+                
+                $query = Assessment::with(['child', 'therapis'])->where('child_id', $childId);
+                
+                if ($request->filled('classification')) {
+                    $query->where('result_classification', $request->classification);
+                }
+
+                $assessments = $query->latest()->paginate(10)->withQueryString();
 
                 return view('assessment.index', compact('assessments', 'selectedChild', 'children'));
             }
@@ -39,17 +42,23 @@ class AssessmentController extends Controller
             return view('assessment.index', compact('children'));
         }
 
+        $query = Assessment::with(['child', 'therapis']);
+
         if ($user->isTerapis()) {
-            $assessments = Assessment::with('child')
-                ->where('therapis_id', $user->id)
-                ->latest()
-                ->paginate(10);
-        } else {
-            // Admin or other role
-            $assessments = Assessment::with(['child', 'therapis'])
-                ->latest()
-                ->paginate(10);
+            $query->where('therapis_id', $user->id);
         }
+
+        if ($request->filled('search')) {
+            $query->whereHas('child', function($q) use ($request) {
+                $q->where('nama_lengkap', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        if ($request->filled('classification')) {
+            $query->where('result_classification', $request->classification);
+        }
+
+        $assessments = $query->latest()->paginate(10)->withQueryString();
 
         return view('assessment.index', compact('assessments'));
     }
@@ -57,15 +66,25 @@ class AssessmentController extends Controller
     /**
      * Show selection list of children to assess.
      */
-    public function selectChild()
+    public function selectChild(Request $request)
     {
         $user = Auth::user();
 
+        $query = Child::query();
+
         if ($user->isTerapis()) {
-            $children = Child::where('therapis_id', $user->id)->get();
-        } else {
-            $children = Child::all();
+            $query->where('therapis_id', $user->id);
         }
+
+        if ($request->filled('search')) {
+            $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('gender')) {
+            $query->where('jenis_kelamin', $request->gender);
+        }
+
+        $children = $query->latest()->get();
 
         return view('assessment.select_child', compact('children'));
     }
@@ -178,13 +197,25 @@ class AssessmentController extends Controller
 
         // If no child selected, show selection page
         if (!$childId) {
+            $query = Child::query();
+
             if ($user->isTerapis()) {
-                $children = Child::where('therapis_id', $user->id)->get();
+                $query->where('therapis_id', $user->id);
             } elseif ($user->isOrangTua()) {
-                $children = $user->children;
-            } else {
-                $children = Child::all();
+                // Using parent_id instead of user->children to build query easily
+                $query->where('parent_id', $user->id);
             }
+
+            if ($request->filled('search')) {
+                $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+            }
+
+            if ($request->filled('gender')) {
+                $query->where('jenis_kelamin', $request->gender);
+            }
+
+            $children = $query->latest()->get();
+
             return view('assessment.select_child_progress', compact('children'));
         }
 

@@ -1,8 +1,8 @@
-# SIMOKA
+# SIMONITA
 **Sistem Informasi Monitoring Terapi Okupasi & Perkembangan Anak**
 
 ## 📝 Deskripsi Sistem
-SIMOKA adalah platform digital yang dirancang untuk membantu terapis okupasi dan orang tua dalam memantau perkembangan anak secara terukur. Sistem ini fokus pada asesmen sensorik (seperti Sensory Short Profile - SSP) dan pelaporan perkembangan pasien secara real-time.
+SIMONITA adalah platform digital yang dirancang untuk membantu terapis okupasi dan orang tua dalam memantau perkembangan anak secara terukur. Sistem ini fokus pada asesmen sensorik (seperti Sensory Short Profile - SSP) dan pelaporan perkembangan pasien secara real-time.
 
 ## 🚀 Tech Stack
 - **Framework**: Laravel 13 (PHP 8.3+)

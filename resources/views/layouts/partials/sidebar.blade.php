@@ -3,10 +3,10 @@
 
     <div class="p-6 flex items-center justify-between border-b border-slate-100 h-[80px] flex-shrink-0">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg">A</div>
+            <img src="{{ asset('simonita.svg') }}" alt="Logo" class="w-10 h-10 drop-shadow">
             <div>
-                <h1 class="font-bold text-slate-800 text-lg leading-tight">Dashboard</h1>
-                <p class="text-xs text-slate-500">Assessment Anak</p>
+                <h1 class="font-bold text-slate-800 text-lg leading-tight">SIMONITA</h1>
+                <p class="text-xs text-slate-500">Sistem Monitoring Anak</p>
             </div>
         </div>
         <button @click="sidebarOpen = false" class="lg:hidden text-slate-400 hover:text-slate-600">

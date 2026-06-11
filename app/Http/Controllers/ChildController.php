@@ -12,17 +12,27 @@ class ChildController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $currentUser = Auth::user();
 
+        $query = Child::with(['parent', 'therapis']);
+
         if ($currentUser->isOrangTua()) {
-            $children = Child::with(['parent', 'therapis'])->where('parent_id', $currentUser->id)->latest()->paginate(10);
+            $query->where('parent_id', $currentUser->id);
         } elseif ($currentUser->isTerapis()) {
-            $children = Child::with(['parent', 'therapis'])->where('therapis_id', $currentUser->id)->latest()->paginate(10);
-        } else {
-            $children = Child::with(['parent', 'therapis'])->latest()->paginate(10);
+            $query->where('therapis_id', $currentUser->id);
         }
+
+        if ($request->filled('search')) {
+            $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('gender')) {
+            $query->where('jenis_kelamin', $request->gender);
+        }
+
+        $children = $query->latest()->paginate(10)->withQueryString();
 
         return view('children.index', compact('children'));
     }

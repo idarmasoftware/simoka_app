@@ -1,28 +1,32 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('simonita.svg') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Orang Tua - SI-MOKA</title>
+    <title>Daftar Orang Tua - SIMONITA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
     </style>
 </head>
-<body class="bg-[#F8FAFC] min-h-screen flex items-center justify-center p-6 py-12">
-    <div class="max-w-2xl w-full">
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-6 py-12 relative">
+    <!-- Background Decoration -->
+    <div class="fixed inset-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full bg-blue-100/60 blur-3xl"></div>
+        <div class="absolute top-1/2 -right-40 w-[400px] h-[400px] rounded-full bg-indigo-50/60 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-2xl w-full z-10">
         <!-- Logo/Brand -->
         <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-14 h-14 bg-blue-600 rounded-2xl shadow-xl shadow-blue-200 mb-4">
-                <span class="text-white text-xl font-extrabold tracking-tighter">SM</span>
-            </div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">SI-MOKA</h1>
-            <p class="text-slate-500 mt-1">Registrasi Akun Orang Tua Pasien</p>
+            <img src="{{ asset('simonita.svg') }}" alt="SIMONITA Logo" class="w-56 mx-auto drop-shadow-sm">
+            <p class="text-slate-500 mt-4">Registrasi Akun Orang Tua Pasien</p>
         </div>
 
         <!-- Register Card -->
-        <div class="bg-white rounded-[2rem] border border-slate-200 shadow-xl shadow-slate-200/50 p-8 sm:p-10">
+        <div class="bg-white/80 backdrop-blur-xl rounded-[2rem] border border-white shadow-2xl shadow-slate-200/50 p-8 sm:p-10">
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-2">
                 <div>
                     <h2 class="text-xl font-bold text-slate-800">Daftar Akun Baru</h2>
@@ -97,7 +101,7 @@
                 <div class="bg-blue-50 border border-blue-100 p-4 rounded-2xl flex gap-3 items-start">
                     <input type="checkbox" id="terms" required class="mt-1 w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500">
                     <label for="terms" class="text-xs text-blue-800 leading-relaxed">
-                        Saya menyetujui <a href="#" class="font-bold underline">Syarat dan Ketentuan</a> penggunaan SI-MOKA untuk pemantauan perkembangan anak saya secara mandiri atau dengan bantuan terapis.
+                        Saya menyetujui <a href="#" class="font-bold underline">Syarat dan Ketentuan</a> penggunaan SIMONITA untuk pemantauan perkembangan anak saya secara mandiri atau dengan bantuan terapis.
                     </label>
                 </div>
 

@@ -26,6 +26,33 @@
     </div>
     @endif
 
+    <!-- Search & Filter -->
+    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-6">
+        <form action="{{ route('users.index') }}" method="GET" class="flex flex-col lg:flex-row flex-wrap items-center gap-4">
+            <div class="w-full lg:flex-1">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama, username, atau email..." autocomplete="off" class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-sm">
+            </div>
+            @if(auth()->user()->isSuperAdmin())
+            <div class="w-full lg:w-48">
+                <select name="role" class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-sm bg-white">
+                    <option value="">Semua Role</option>
+                    <option value="super_admin" {{ request('role') == 'super_admin' ? 'selected' : '' }}>Super Admin</option>
+                    <option value="terapis" {{ request('role') == 'terapis' ? 'selected' : '' }}>Terapis</option>
+                    <option value="orang_tua" {{ request('role') == 'orang_tua' ? 'selected' : '' }}>Orang Tua</option>
+                </select>
+            </div>
+            @endif
+            <div>
+                <button type="submit" class="w-full sm:w-auto bg-blue-50 text-blue-600 hover:bg-blue-100 px-6 py-2 rounded-xl font-medium transition text-sm">Cari</button>
+            </div>
+            @if(request()->hasAny(['search', 'role']))
+            <div>
+                <a href="{{ route('users.index') }}" class="flex items-center justify-center w-full sm:w-auto bg-slate-50 text-slate-500 hover:bg-slate-100 px-4 py-2 rounded-xl font-medium transition text-sm">Reset</a>
+            </div>
+            @endif
+        </form>
+    </div>
+
     <!-- Users Table -->
     <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
         <div class="overflow-x-auto">

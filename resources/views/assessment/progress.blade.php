@@ -130,6 +130,51 @@
                 </div>
             @endif
         </div>
+
+        <!-- Full History Section -->
+        <div class="mt-8">
+            <h3 class="text-xl font-bold text-slate-800 mb-4">Riwayat Seluruh Pertemuan</h3>
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                                <th class="p-5">Pertemuan Ke-</th>
+                                <th class="p-5">Tanggal</th>
+                                <th class="p-5 text-center">Skor SSP</th>
+                                <th class="p-5">Hasil Klasifikasi</th>
+                                <th class="p-5 text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-sm text-slate-600">
+                            @foreach($assessments as $index => $assessment)
+                                <tr class="hover:bg-slate-50/50 transition">
+                                    <td class="p-5 font-bold text-slate-800">Pertemuan {{ $index + 1 }}</td>
+                                    <td class="p-5">{{ $assessment->created_at->format('d M Y, H:i') }}</td>
+                                    <td class="p-5 text-center font-black text-slate-800 text-base">{{ $assessment->score }}</td>
+                                    <td class="p-5">
+                                        @php
+                                            $class = $assessment->result_classification;
+                                            $badge = 'bg-emerald-50 text-emerald-700 border border-emerald-100';
+                                            if ($class === 'Probable Difference') $badge = 'bg-amber-50 text-amber-700 border border-amber-100';
+                                            if ($class === 'Definite Difference') $badge = 'bg-rose-50 text-rose-700 border border-rose-100';
+                                        @endphp
+                                        <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-semibold {{ $badge }}">
+                                            {{ $class }}
+                                        </span>
+                                    </td>
+                                    <td class="p-5 text-center">
+                                        <a href="{{ route('assessments.show', $assessment) }}" class="inline-flex items-center gap-1.5 text-blue-600 hover:text-blue-700 font-bold hover:underline">
+                                            Detail &rarr;
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     @endif
 </div>
 @endsection

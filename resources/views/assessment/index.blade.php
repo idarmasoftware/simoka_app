@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="max-w-5xl mx-auto">
-    @if(Auth::user()->isOrangTua() && !isset($selectedChild))
+    @if(!isset($selectedChild))
         <div class="mb-8">
             <h2 class="text-2xl font-bold text-slate-800">Pilih Anak</h2>
             <p class="text-slate-500 mt-1">Silakan pilih anak untuk melihat riwayat hasil assessment mereka.</p>
@@ -53,7 +53,7 @@
                 <p class="text-slate-500 mt-1">Kelola dan lihat seluruh riwayat pengisian kuesioner Short Sensory Profile (SSP).</p>
             </div>
             <div class="flex items-center gap-3">
-                @if(Auth::user()->isOrangTua() && isset($selectedChild))
+                @if(isset($selectedChild))
                     <a href="{{ route('assessments.index') }}" class="inline-flex items-center justify-center gap-2 bg-white text-slate-600 border border-slate-200 font-bold px-4 py-3 rounded-xl hover:bg-slate-50 transition text-sm">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                         Pilih Anak Lain
@@ -71,7 +71,7 @@
         <!-- Search & Filter -->
         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-6">
             <form action="{{ route('assessments.index') }}" method="GET" class="flex flex-col lg:flex-row flex-wrap items-center gap-4">
-                @if(Auth::user()->isOrangTua() && isset($selectedChild))
+                @if(isset($selectedChild))
                     <input type="hidden" name="child_id" value="{{ $selectedChild->id }}">
                 @else
                     <div class="w-full lg:flex-1">
@@ -91,7 +91,7 @@
                 </div>
                 @if(request()->hasAny(['search', 'classification']))
                 <div>
-                    <a href="{{ route('assessments.index', Auth::user()->isOrangTua() && isset($selectedChild) ? ['child_id' => $selectedChild->id] : []) }}" class="flex items-center justify-center w-full sm:w-auto bg-slate-50 text-slate-500 hover:bg-slate-100 px-4 py-2 rounded-xl font-medium transition text-sm">Reset</a>
+                    <a href="{{ route('assessments.index', isset($selectedChild) ? ['child_id' => $selectedChild->id] : []) }}" class="flex items-center justify-center w-full sm:w-auto bg-slate-50 text-slate-500 hover:bg-slate-100 px-4 py-2 rounded-xl font-medium transition text-sm">Reset</a>
                 </div>
                 @endif
             </form>

@@ -16,43 +16,38 @@ class AssessmentController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+        $childId = $request->query('child_id');
 
-        if ($user->isOrangTua()) {
-            $childId = $request->query('child_id');
-            $children = $user->children;
+        if (! $childId) {
+            $query = Child::query();
 
-            if ($childId) {
-                if (! $user->children()->where('id', $childId)->exists()) {
-                    abort(403, 'Anda tidak diizinkan melihat assessment untuk anak ini.');
-                }
-
-                $selectedChild = Child::findOrFail($childId);
-                
-                $query = Assessment::with(['child', 'therapis'])->where('child_id', $childId);
-                
-                if ($request->filled('classification')) {
-                    $query->where('result_classification', $request->classification);
-                }
-
-                $assessments = $query->latest()->paginate(10)->withQueryString();
-
-                return view('assessment.index', compact('assessments', 'selectedChild', 'children'));
+            if ($user->isTerapis()) {
+                $query->where('therapis_id', $user->id);
+            } elseif ($user->isOrangTua()) {
+                $query->where('parent_id', $user->id);
             }
+
+            if ($request->filled('search')) {
+                $query->where('nama_lengkap', 'like', '%'.$request->search.'%');
+            }
+
+            $children = $query->latest()->get();
 
             return view('assessment.index', compact('children'));
         }
 
-        $query = Assessment::with(['child', 'therapis']);
+        // Jika child_id ada, tampilkan daftar assessment untuk anak tersebut
+        $selectedChild = Child::findOrFail($childId);
 
-        if ($user->isTerapis()) {
-            $query->where('therapis_id', $user->id);
+        if ($user->isOrangTua() && $selectedChild->parent_id !== $user->id) {
+            abort(403, 'Anda tidak diizinkan melihat assessment untuk anak ini.');
         }
 
-        if ($request->filled('search')) {
-            $query->whereHas('child', function($q) use ($request) {
-                $q->where('nama_lengkap', 'like', '%' . $request->search . '%');
-            });
+        if ($user->isTerapis() && $selectedChild->therapis_id !== $user->id) {
+            abort(403, 'Anda tidak diizinkan melihat assessment untuk anak ini.');
         }
+
+        $query = Assessment::with(['child', 'therapis'])->where('child_id', $childId);
 
         if ($request->filled('classification')) {
             $query->where('result_classification', $request->classification);
@@ -60,7 +55,12 @@ class AssessmentController extends Controller
 
         $assessments = $query->latest()->paginate(10)->withQueryString();
 
-        return view('assessment.index', compact('assessments'));
+        $children = collect();
+        if ($user->isOrangTua()) {
+            $children = $user->children;
+        }
+
+        return view('assessment.index', compact('assessments', 'selectedChild', 'children'));
     }
 
     /**
@@ -77,7 +77,7 @@ class AssessmentController extends Controller
         }
 
         if ($request->filled('search')) {
-            $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+            $query->where('nama_lengkap', 'like', '%'.$request->search.'%');
         }
 
         if ($request->filled('gender')) {
@@ -192,11 +192,11 @@ class AssessmentController extends Controller
     public function progress(Request $request)
     {
         $user = Auth::user();
-        
+
         $childId = $request->query('child_id');
 
         // If no child selected, show selection page
-        if (!$childId) {
+        if (! $childId) {
             $query = Child::query();
 
             if ($user->isTerapis()) {
@@ -207,7 +207,7 @@ class AssessmentController extends Controller
             }
 
             if ($request->filled('search')) {
-                $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                $query->where('nama_lengkap', 'like', '%'.$request->search.'%');
             }
 
             if ($request->filled('gender')) {
@@ -220,7 +220,7 @@ class AssessmentController extends Controller
         }
 
         // Validate access
-        if ($user->isOrangTua() && !$user->children()->where('id', $childId)->exists()) {
+        if ($user->isOrangTua() && ! $user->children()->where('id', $childId)->exists()) {
             abort(403, 'Anda tidak diizinkan melihat progress untuk anak ini.');
         }
 
@@ -237,6 +237,6 @@ class AssessmentController extends Controller
         $preAssessment = $assessments->first();
         $postAssessment = $assessments->last();
 
-        return view('assessment.progress', compact('selectedChild', 'preAssessment', 'postAssessment'));
+        return view('assessment.progress', compact('selectedChild', 'preAssessment', 'postAssessment', 'assessments'));
     }
 }

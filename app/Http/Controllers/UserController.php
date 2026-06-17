@@ -15,19 +15,21 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $currentUser = Auth::user();
-        
+
         $query = User::query();
 
         if ($currentUser->isTerapis()) {
             $query->where('role', 'orang_tua');
+        } elseif ($currentUser->isSuperAdmin()) {
+            $query->where('role', '!=', 'super_admin');
         }
 
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('username', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('username', 'like', "%{$search}%");
             });
         }
 

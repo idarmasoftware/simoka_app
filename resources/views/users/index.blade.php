@@ -36,7 +36,6 @@
             <div class="w-full lg:w-48">
                 <select name="role" class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-sm bg-white">
                     <option value="">Semua Role</option>
-                    <option value="super_admin" {{ request('role') == 'super_admin' ? 'selected' : '' }}>Super Admin</option>
                     <option value="terapis" {{ request('role') == 'terapis' ? 'selected' : '' }}>Terapis</option>
                     <option value="orang_tua" {{ request('role') == 'orang_tua' ? 'selected' : '' }}>Orang Tua</option>
                 </select>

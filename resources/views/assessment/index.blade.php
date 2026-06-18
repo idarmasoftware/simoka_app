@@ -131,7 +131,20 @@
                                     @if(Auth::user()->isTerapis())
                                         <td class="p-5">{{ $assessment->child->parent->name }}</td>
                                     @else
-                                        <td class="p-5">{{ $assessment->therapis->name }}</td>
+                                        <td class="p-5">
+                                            <div class="flex items-center gap-2">
+                                                <span>{{ $assessment->therapis->name }}</span>
+                                                @php
+                                                    $phone = $assessment->therapis->phone_number;
+                                                    $waLink = $phone ? 'https://wa.me/' . preg_replace('/^0/', '62', $phone) : '#';
+                                                    $onClick = $phone ? '' : 'alert(\'Nomor WhatsApp terapis belum tersedia.\'); return false;';
+                                                    $btnClass = $phone ? 'bg-emerald-500 hover:bg-emerald-600 text-white' : 'bg-slate-200 text-slate-400 cursor-not-allowed';
+                                                @endphp
+                                                <a href="{{ $waLink }}" target="{{ $phone ? '_blank' : '_self' }}" onclick="{{ $onClick }}" class="inline-flex items-center justify-center {{ $btnClass }} rounded-full p-1 transition shadow-sm" title="Hubungi WhatsApp">
+                                                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.573-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.201.535 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.129.332.202.043.073.043.423-.101.827z"></path></svg>
+                                                </a>
+                                            </div>
+                                        </td>
                                     @endif
                                     <td class="p-5">{{ $assessment->created_at->format('d M Y') }}</td>
                                     <td class="p-5 text-center font-black text-slate-800 text-base">{{ $assessment->score }}</td>

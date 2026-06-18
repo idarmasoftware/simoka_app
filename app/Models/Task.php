@@ -19,8 +19,16 @@ class Task extends Model
         'therapis_id',
         'title',
         'description',
+        'deadline',
         'status',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'deadline' => 'datetime',
+        ];
+    }
 
     public function child(): BelongsTo
     {

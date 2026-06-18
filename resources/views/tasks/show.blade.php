@@ -39,7 +39,16 @@
                 <h3 class="font-bold text-slate-800 text-2xl mt-3">{{ $task->title }}</h3>
                 <p class="text-slate-500 text-sm mt-1">Untuk anak: <strong class="text-slate-700 font-bold">{{ $task->child->nama_lengkap }}</strong></p>
             </div>
-            <div>
+            <div class="flex items-center gap-3">
+                @if(auth()->user()->isTerapis() && in_array($task->status, ['pending', 'in_progress', 'submitted']))
+                <form id="remindForm_{{ $task->id }}" action="{{ route('tasks.remind', $task) }}" method="POST">
+                    @csrf
+                    <button type="button" onclick="confirmReminder('remindForm_{{ $task->id }}')" class="bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700 px-3 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 border border-blue-100">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                        Kirim Reminder
+                    </button>
+                </form>
+                @endif
                 @php
                     $status = $task->status;
                     $badge = 'bg-slate-150 text-slate-700';

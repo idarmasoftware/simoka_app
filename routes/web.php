@@ -58,6 +58,7 @@ Route::middleware('auth')->group(function () {
         Route::post('tasks', [TaskController::class, 'store'])->name('tasks.store');
         Route::get('tasks/{task}/review', [TaskController::class, 'review'])->name('tasks.review');
         Route::post('tasks/steps/{step}/feedback', [TaskController::class, 'updateStepFeedback'])->name('tasks.steps.feedback');
+        Route::post('tasks/{task}/remind', [TaskController::class, 'remind'])->name('tasks.remind');
     });
 
     Route::middleware('role:orang_tua')->group(function () {
@@ -68,4 +69,19 @@ Route::middleware('auth')->group(function () {
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('/notifications/mark-read', function () {
+        auth()->user()->unreadNotifications->markAsRead();
+        return response()->json(['success' => true]);
+    })->name('notifications.mark-read');
+
+    Route::post('/notifications/{id}/mark-read', function ($id) {
+        $notification = auth()->user()->notifications()->findOrFail($id);
+        $notification->markAsRead();
+        return response()->json(['success' => true]);
+    })->name('notifications.mark-read-single');
+
+    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
 });

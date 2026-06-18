@@ -73,8 +73,9 @@ class DashboardController extends Controller
 
     private function orangTuaDashboard($user)
     {
-        $anakTerdaftar = $user->children()->count();
-        $childIds = $user->children()->pluck('id');
+        $children = $user->children()->with('therapis')->get();
+        $anakTerdaftar = $children->count();
+        $childIds = $children->pluck('id');
         
         $tugasBerjalan = Task::whereIn('child_id', $childIds)
             ->where('status', 'in_progress')
@@ -93,7 +94,8 @@ class DashboardController extends Controller
             'anakTerdaftar',
             'tugasBerjalan',
             'langkahPerluDiunggah',
-            'assessmentTerakhir'
+            'assessmentTerakhir',
+            'children'
         ));
     }
 }

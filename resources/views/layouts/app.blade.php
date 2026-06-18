@@ -54,7 +54,26 @@
         @include('layouts.partials.footer')
     </div>
 </div>
-
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmReminder(formId) {
+            Swal.fire({
+                title: 'Kirim Pengingat?',
+                text: "Notifikasi akan dikirimkan ke orang tua untuk mengingatkan tugas ini.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#9333ea', // purple-600
+                cancelButtonColor: '#94a3b8', // slate-400
+                confirmButtonText: 'Ya, Kirim!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(formId).submit();
+                }
+            })
+        }
+    </script>
     @stack('scripts')
 </body>
 </html>

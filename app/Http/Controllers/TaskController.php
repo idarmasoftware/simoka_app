@@ -61,6 +61,7 @@ class TaskController extends Controller
             'assessment_id' => 'required|exists:assessments,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'deadline' => 'nullable|date',
             'steps' => 'required|array|min:1',
             'steps.*' => 'required|string|max:1000',
         ]);
@@ -79,8 +80,14 @@ class TaskController extends Controller
             'therapis_id' => Auth::id(),
             'title' => $validated['title'],
             'description' => $validated['description'],
+            'deadline' => $validated['deadline'] ?? null,
             'status' => 'pending', // pending submission from parent
         ]);
+
+        // Send notification to parent if they exist
+        if ($assessment->child && $assessment->child->parent) {
+            $assessment->child->parent->notify(new \App\Notifications\NewTaskNotification($task));
+        }
 
         // Create the steps
         foreach ($validated['steps'] as $index => $instruction) {
@@ -242,5 +249,24 @@ class TaskController extends Controller
 
         return redirect()->route('tasks.review', $task)
             ->with('success', "Feedback untuk Langkah {$step->step_number} berhasil disimpan!");
+    }
+
+    public function remind(Task $task)
+    {
+        // Pastikan hanya Terapis yang menangani tugas ini yang bisa mengirim reminder
+        if (auth()->user()->isTerapis() && $task->therapis_id !== auth()->id()) {
+            abort(403);
+        }
+
+        if (!in_array($task->status, ['pending', 'in_progress', 'submitted'])) {
+            return redirect()->back()->with('error', 'Hanya tugas yang belum selesai yang bisa diberi pengingat.');
+        }
+
+        // Kirim notifikasi ke orang tua
+        if ($task->child && $task->child->parent) {
+            $task->child->parent->notify(new \App\Notifications\TaskManualReminderNotification($task));
+        }
+
+        return redirect()->back()->with('success', 'Notifikasi pengingat berhasil dikirim ke orang tua.');
     }
 }

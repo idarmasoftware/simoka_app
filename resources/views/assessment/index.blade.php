@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="max-w-5xl mx-auto">
-    @if(!isset($selectedChild))
+    @if(Auth::user()->isOrangTua() && !isset($selectedChild))
         <div class="mb-8">
             <h2 class="text-2xl font-bold text-slate-800">Pilih Anak</h2>
             <p class="text-slate-500 mt-1">Silakan pilih anak untuk melihat riwayat hasil assessment mereka.</p>
@@ -56,7 +56,7 @@
                 @if(isset($selectedChild))
                     <a href="{{ route('assessments.index') }}" class="inline-flex items-center justify-center gap-2 bg-white text-slate-600 border border-slate-200 font-bold px-4 py-3 rounded-xl hover:bg-slate-50 transition text-sm">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                        Pilih Anak Lain
+                        {{ Auth::user()->isOrangTua() ? 'Pilih Anak Lain' : 'Semua Assessment' }}
                     </a>
                 @endif
                 @if(Auth::user()->isTerapis())

@@ -18,14 +18,9 @@ class AssessmentController extends Controller
         $user = Auth::user();
         $childId = $request->query('child_id');
 
-        if (! $childId) {
+        if (! $childId && $user->isOrangTua()) {
             $query = Child::query();
-
-            if ($user->isTerapis()) {
-                $query->where('therapis_id', $user->id);
-            } elseif ($user->isOrangTua()) {
-                $query->where('parent_id', $user->id);
-            }
+            $query->where('parent_id', $user->id);
 
             if ($request->filled('search')) {
                 $query->where('nama_lengkap', 'like', '%'.$request->search.'%');
@@ -36,18 +31,33 @@ class AssessmentController extends Controller
             return view('assessment.index', compact('children'));
         }
 
-        // Jika child_id ada, tampilkan daftar assessment untuk anak tersebut
-        $selectedChild = Child::findOrFail($childId);
+        $query = Assessment::with(['child', 'therapis']);
+        $selectedChild = null;
 
-        if ($user->isOrangTua() && $selectedChild->parent_id !== $user->id) {
-            abort(403, 'Anda tidak diizinkan melihat assessment untuk anak ini.');
+        if ($childId) {
+            $selectedChild = Child::findOrFail($childId);
+
+            if ($user->isOrangTua() && $selectedChild->parent_id !== $user->id) {
+                abort(403, 'Anda tidak diizinkan melihat assessment untuk anak ini.');
+            }
+
+            if ($user->isTerapis() && $selectedChild->therapis_id !== $user->id) {
+                abort(403, 'Anda tidak diizinkan melihat assessment untuk anak ini.');
+            }
+
+            $query->where('child_id', $childId);
+        } else {
+            if ($user->isTerapis()) {
+                $query->where('therapis_id', $user->id);
+            }
+            // Super Admin melihat semua
         }
 
-        if ($user->isTerapis() && $selectedChild->therapis_id !== $user->id) {
-            abort(403, 'Anda tidak diizinkan melihat assessment untuk anak ini.');
+        if ($request->filled('search') && ! $childId) {
+            $query->whereHas('child', function ($q) use ($request) {
+                $q->where('nama_lengkap', 'like', '%'.$request->search.'%');
+            });
         }
-
-        $query = Assessment::with(['child', 'therapis'])->where('child_id', $childId);
 
         if ($request->filled('classification')) {
             $query->where('result_classification', $request->classification);
